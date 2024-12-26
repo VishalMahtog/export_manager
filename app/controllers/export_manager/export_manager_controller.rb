@@ -1,5 +1,7 @@
 module ExportManager
   class ExportManagerController < ApplicationController
+    before_action :set_global_variable, only: %i[download]
+
     def export
       @model_name = ActiveRecord::Base.connection.tables.map do |t|
         formatted_name = t&.gsub("_", " ")&.titleize&.gsub(" ", "")
@@ -31,13 +33,19 @@ module ExportManager
           end
         end
 
-        send_data csv_data, filename: "export_#{Date.today}.csv", type: "text/csv"
+        send_data csv_data, filename: @file_name, type: "text/csv"
 
       rescue => e
         redirect_to export_export_manager_index_path
         logger.error "Error generating CSV: #{e.message}"
         flash[:error] = "An error occurred while generating the CSV file - #{e.message}"
       end
+    end
+
+    private
+
+    def set_global_variable
+      @file_name = defined?(CSV_FILE_NAME) ? CSV_FILE_NAME : "export_#{Date.today}.csv"
     end
   end
 end
