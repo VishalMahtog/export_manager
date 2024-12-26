@@ -3,10 +3,20 @@ module ExportManager
     before_action :set_global_variable, only: %i[download]
 
     def export
+      remove_table = defined?(REMOVE_TABLE_NAME) ? REMOVE_TABLE_NAME : []
+
       @model_name = ActiveRecord::Base.connection.tables.map do |t|
-        formatted_name = t&.gsub("_", " ")&.titleize&.gsub(" ", "")
+        next if remove_table.include?(t.downcase)
+
+        formatted_name = t.gsub("_", " ").titleize.gsub(" ", "")
         [ formatted_name, t ]
+      end.compact
+
+      if remove_table.present?
+        @model_name.delete_if { |item| remove_table.any? { |target| item.include?(target) } }
       end
+
+      @model_name
     end
 
     def send_coloum_name
