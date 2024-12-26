@@ -1,0 +1,71 @@
+<%= label_tag 'Table', 'Select Tables' %>
+<%= select_tag 'Tables', options_for_select(@model_name), id: 'table-select' %>
+
+<div id="checkboxes"></div>
+
+<%= javascript_tag do %>
+  $('#table-select').change(function() {
+    var selectTable = $(this).val();
+    console.log('callin')
+    $.ajax({
+      url: '/send_coloum_name',
+      method: 'GET',
+      data: { table: selectTable },
+      success: function(response) {
+        var checkboxesContainer = $('#checkboxes');
+        checkboxesContainer.empty();
+
+        var form = $('<form>').attr({
+          id: 'checkbox-form',
+          action: '/dowload_csv',
+          method: 'GET'
+        });
+
+        var hiddenField1 = $('<input>').attr({
+          type: 'hidden',
+          name: 'table',
+          value: $('#table-select').val()
+        });
+
+        form.append(hiddenField1);
+
+        var selectAllCheckbox = $('<input>').attr({
+          type: 'checkbox',
+          id: 'select-all',
+          name: 'select-all',
+          checked: true,
+        }).on('change', function() {
+          $('input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+        });
+
+        var selectAllLabel = $('<label>').attr('for', 'select-all').text('Select All');
+        form.append(selectAllCheckbox).append(selectAllLabel).append('<br>');
+
+        for (var i = 0; i < response.length; i++) {
+          var key = response[i];
+          var checkbox = $('<input>').attr({
+            type: 'checkbox',
+            id: key,
+            name: key,
+            value: key,
+            checked: 'checked' // Check all checkboxes by default
+          });
+          var label = $('<label>').attr('for', key).text(key);
+          form.append(checkbox).append(label).append('<br>');
+        }
+
+        var submitButton = $('<input>').attr({
+          type: 'submit',
+          value: 'Export CSV'
+        });
+
+        form.append(submitButton);
+
+        checkboxesContainer.append(form);
+      },
+      error: function() {
+        alert('An error occurred while fetching car information.');
+      }
+    });
+  });
+<% end %>

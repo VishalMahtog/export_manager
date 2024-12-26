@@ -7,11 +7,13 @@
 
   <%= yield :head %>
 
-  <%= stylesheet_link_tag    "export_manager/application", media: "all" %>
+  <%= stylesheet_link_tag "export_manager/application", media: "all" %>
+
+  <%= javascript_include_tag "https://code.jquery.com/jquery-3.6.0.min.js" %>
 </head>
 <body>
 
-<%= yield %>
+  <%= yield %>
 
 </body>
 </html>
