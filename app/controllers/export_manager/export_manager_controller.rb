@@ -12,25 +12,32 @@ module ExportManager
       render json: columns
     end
 
-    def dowload_csv
-      request = params
-      model_name = request["table"].singularize.camelize
-      dataes = "#{model_name}".constantize.all
+    def download
+      begin
+        request = params
+        model_name = request["table"].singularize.camelize
+        dataes = "#{model_name}".constantize.all
 
-      request.delete("action")
-      request.delete("controller")
-      request.delete("table")
-      request.delete("select-all")
-      column = request.keys
+        request.delete("action")
+        request.delete("controller")
+        request.delete("table")
+        request.delete("select-all")
+        column = request.keys
 
-      csv_data = CSV.generate(headers: true) do |csv|
-        csv << column.map(&:capitalize)
-        dataes.each do |data|
-          csv << column.map { |col| data.send(col) }
+        csv_data = CSV.generate(headers: true) do |csv|
+          csv << column.map(&:capitalize)
+          dataes.each do |data|
+            csv << column.map { |col| data.send(col) }
+          end
         end
-      end
 
-      send_data csv_data, filename: "export_#{Date.today}.csv", type: "text/csv"
+        send_data csv_data, filename: "export_#{Date.today}.csv", type: "text/csv"
+
+      rescue => e
+        redirect_to export_export_manager_index_path
+        logger.error "Error generating CSV: #{e.message}"
+        flash[:error] = "An error occurred while generating the CSV file - #{e.message}"
+      end
     end
   end
 end

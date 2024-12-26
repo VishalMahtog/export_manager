@@ -1,5 +1,7 @@
-<%= label_tag 'Table', 'Select Tables' %>
-<%= select_tag 'Tables', options_for_select(@model_name), id: 'table-select', class: 'basic-single' %>
+<div class="select-table">
+  <%= label_tag 'Table', 'Select Tables' %>
+  <%= select_tag 'Tables', options_for_select(@model_name), id: 'table-select', class: 'basic-single' %>
+</div>
 
 <div id="checkboxes"></div>
 
@@ -23,7 +25,7 @@
 
           var form = $('<form>').attr({
             id: 'checkbox-form',
-            action: '/download_csv',  // Ensure this route exists
+            action: '/download',  // Ensure this route exists
             method: 'GET'
           });
 
@@ -76,4 +78,113 @@
       });
     });
   });
+<% end %>
+
+<%= content_for :head do %>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+
+    label {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      display: block;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .select-table {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .select-table label {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .select2-container--default .select2-selection--single {
+      height: 40px;
+      border-radius: 5px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      padding: 5px;
+    }
+
+    .select2-container--default .select2-dropdown {
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .select2-container--default .select2-search--dropdown input {
+      font-size: 1rem;
+      padding: 6px;
+    }
+
+    #checkboxes {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #checkbox-form {
+      margin: 0;
+    }
+
+    #checkbox-form input[type="checkbox"] {
+      margin-right: 20px;
+      accent-color: #007bff;
+    }
+
+    #checkbox-form label {
+      display: inline-block;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    #select-all {
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    #checkbox-form input[type="submit"] {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    #checkbox-form input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+  </style>
 <% end %>
