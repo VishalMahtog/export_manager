@@ -9,7 +9,7 @@ module ExportManager
         next if remove_table.include?(t.downcase)
 
         formatted_name = t.gsub("_", " ").titleize.gsub(" ", "")
-        [ formatted_name, t ]
+        [formatted_name, t]
       end.compact
 
       if remove_table.present?
@@ -26,27 +26,17 @@ module ExportManager
 
     def download
       begin
-        request = params
-        model_name = request["table"].singularize.camelize
-        dataes = "#{model_name}".constantize.all
+        request_params = params.except("action", "controller", "table", "select-all")
+        model_name = params["table"].singularize.camelize
+        columns = request_params.keys
 
-        request.delete("action")
-        request.delete("controller")
-        request.delete("table")
-        request.delete("select-all")
-        column = request.keys
+        records = model_name.constantize.all
 
-        csv_data = CSV.generate(headers: true) do |csv|
-          csv << column.map(&:capitalize)
-          dataes.each do |data|
-            csv << column.map { |col| data.send(col) }
-          end
-        end
-
+        csv_data = ExportManager.generate_csv(records, columns)
         send_data csv_data, filename: @file_name, type: "text/csv"
 
       rescue => e
-        redirect_to export_export_manager_index_path
+        redirect_to export_path
         logger.error "Error generating CSV: #{e.message}"
         flash[:error] = "An error occurred while generating the CSV file - #{e.message}"
       end
