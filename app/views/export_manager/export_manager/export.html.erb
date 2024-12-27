@@ -88,6 +88,14 @@
             $('#export-type').val('excel');
           });
 
+          var jsonButton = $('<input>').attr({
+            type: 'submit',
+            value: 'Export JSON',
+            class: 'export-button'
+          }).on('click', function() {
+            $('#export-type').val('json');
+          });
+
           var exportTypeField = $('<input>').attr({
             type: 'hidden',
             name: 'type',
@@ -96,7 +104,7 @@
           });
 
           form.append(exportTypeField);
-          form.append(csvButton).append(excelButton);
+          form.append(csvButton).append(excelButton).append(jsonButton);
 
           checkboxesContainer.append(form);
         },

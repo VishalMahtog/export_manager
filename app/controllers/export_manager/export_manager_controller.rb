@@ -47,6 +47,8 @@ module ExportManager
         @file_name = defined?(CSV_FILE_NAME) ? CSV_FILE_NAME : "export_#{Date.today}.csv"
       when "excel"
         @file_name = defined?(EXCEL_FILE_NAME) ? EXCEL_FILE_NAME : "export_#{Date.today}.xlsx"
+      when "json"
+        @file_name = defined?(JSON_FILE_NAME) ? JSON_FILE_NAME : "export_#{Date.today}.json"
       end
     end
 
@@ -58,6 +60,9 @@ module ExportManager
       when "excel"
         excel_data = ExportManager.generate_excel(records, columns)
         send_excel(excel_data, file_name)
+      when "json"
+        excel_data = ExportManager.generate_json(records, columns)
+        send_json(excel_data, file_name)
       end
     end
 
@@ -70,6 +75,10 @@ module ExportManager
                 filename: file_name,
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 disposition: "attachment"
+    end
+
+    def send_json(json_data, file_name)
+      send_data json_data, filename: file_name, type: "application/json"
     end
   end
 end

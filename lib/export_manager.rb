@@ -22,4 +22,9 @@ module ExportManager
     end
     wb.to_stream.read
   end
+
+  def self.generate_json(records, columns)
+    json_data = records.as_json(only: columns)
+    json_data.to_json
+  end
 end
