@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.email       = [ "vishalgmahto@proton.me" ]
   spec.homepage    = "https://github.com/VishalMahtog/export_manager"
   spec.summary     = "ExportManager handles the dynamic export of table data to CSV format."
-  spec.description = "The ExportManager allows users to export data from dynamic tables with dynamic columns. The system provides flexibility in choosing the data to be exported and generates a CSV file accordingly."
+  spec.description = "The ExportManager allows users to export data from dynamic tables with dynamic columns. The system provides flexibility in selecting the data to be exported and generates a CSV, JSON, Excel, or XML file accordingly."
   spec.license     = "MIT"
   spec.metadata["homepage_uri"] = 'https://github.com/VishalMahtog/export_manager'
   spec.metadata["source_code_uri"] = "https://github.com/VishalMahtog/export_manager"
