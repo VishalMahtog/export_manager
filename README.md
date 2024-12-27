@@ -4,7 +4,7 @@ ExportManager handles the dynamic export of table data to CSV, JSON, EXCEL and X
 ## Usage
 The ExportManager allows users to export data from dynamic tables with dynamic columns. The system provides flexibility in choosing the data to be exported and generates a CSV, JSON, EXCEL and XML file accordingly.
 
-## Domo
+## Demo
 [Screencast from 27-12-24 04:09:24 PM IST.webm](https://github.com/user-attachments/assets/17d245c3-5234-4171-b349-6cc1a74ea847)
 
 ## Quick Start
