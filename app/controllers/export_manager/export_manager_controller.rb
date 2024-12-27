@@ -49,6 +49,8 @@ module ExportManager
         @file_name = defined?(EXCEL_FILE_NAME) ? EXCEL_FILE_NAME : "export_#{Date.today}.xlsx"
       when "json"
         @file_name = defined?(JSON_FILE_NAME) ? JSON_FILE_NAME : "export_#{Date.today}.json"
+      when "xml"
+        @file_name = defined?(XML_FILE_NAME) ? XML_FILE_NAME : "export_#{Date.today}.xml"
       end
     end
 
@@ -63,6 +65,12 @@ module ExportManager
       when "json"
         excel_data = ExportManager.generate_json(records, columns)
         send_json(excel_data, file_name)
+      when "xml"
+        puts "records======#{records.first}"
+        puts "columns======#{columns}"
+
+        xml_data = ExportManager.generate_xml(records, columns)
+        send_xml(xml_data, file_name)
       end
     end
 
@@ -79,6 +87,12 @@ module ExportManager
 
     def send_json(json_data, file_name)
       send_data json_data, filename: file_name, type: "application/json"
+    end
+
+    def send_xml(xml_data, file_name)
+      send_data xml_data,
+                type: "application/xml",
+                disposition: "attachment; filename=\"#{file_name}\""
     end
   end
 end

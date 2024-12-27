@@ -27,4 +27,9 @@ module ExportManager
     json_data = records.as_json(only: columns)
     json_data.to_json
   end
+
+  def self.generate_xml(records, columns)
+    json_data = records.as_json(only: columns)
+    json_data.to_xml(root: "records", skip_types: true)
+  end
 end
