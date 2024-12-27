@@ -7,6 +7,8 @@ The ExportManager allows users to export data from dynamic tables with dynamic c
 ## Quick Start
 ```ruby
 1) gem "export_manager"
+   gem "caxlsx"
+   gem "caxlsx_rails"
 2) Add on config/routes.rb -> mount ExportManager::Engine, at: '/'
 3) Add manifest.js
     //= link export_manager/application.css
@@ -26,6 +28,8 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem "export_manager"
+gem "caxlsx"
+gem "caxlsx_rails"
 ```
 
 And then execute:

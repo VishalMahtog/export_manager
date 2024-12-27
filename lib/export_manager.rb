@@ -1,5 +1,6 @@
 require "export_manager/version"
 require "export_manager/engine"
+require "csv"
 
 module ExportManager
   def self.generate_csv(records, columns)
@@ -13,7 +14,7 @@ module ExportManager
 
   def self.generate_excel(records, columns)
     wb = Axlsx::Package.new
-    wb.workbook.add_worksheet(name: "Users Report") do |sheet|
+    wb.workbook.add_worksheet(name: "Report") do |sheet|
       sheet.add_row columns
 
       records.each do |record|

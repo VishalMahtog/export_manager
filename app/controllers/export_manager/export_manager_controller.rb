@@ -66,9 +66,6 @@ module ExportManager
         excel_data = ExportManager.generate_json(records, columns)
         send_json(excel_data, file_name)
       when "xml"
-        puts "records======#{records.first}"
-        puts "columns======#{columns}"
-
         xml_data = ExportManager.generate_xml(records, columns)
         send_xml(xml_data, file_name)
       end
