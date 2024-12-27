@@ -26,14 +26,11 @@ module ExportManager
 
     def download
       begin
-        request_params = params.except("action", "controller", "table", "select-all")
+        request_params = params.except("action", "controller", "table", "select-all", "type")
         model_name = params["table"].singularize.camelize
         columns = request_params.keys
-
         records = model_name.constantize.all
-
-        csv_data = ExportManager.generate_csv(records, columns)
-        send_data csv_data, filename: @file_name, type: "text/csv"
+        export_data(records, columns, @file_name)
 
       rescue => e
         redirect_to export_path
@@ -45,7 +42,34 @@ module ExportManager
     private
 
     def set_global_variable
-      @file_name = defined?(CSV_FILE_NAME) ? CSV_FILE_NAME : "export_#{Date.today}.csv"
+      case params[:type]
+      when 'csv'
+        @file_name = defined?(CSV_FILE_NAME) ? CSV_FILE_NAME : "export_#{Date.today}.csv"
+      when 'excel'
+        @file_name = defined?(EXCEL_FILE_NAME) ? EXCEL_FILE_NAME : "export_#{Date.today}.xlsx"
+      end
+    end
+
+    def export_data(records, columns, file_name)
+      case params[:type]
+      when 'csv'
+        csv_data = ExportManager.generate_csv(records, columns)
+        send_csv(csv_data, file_name)
+      when 'excel'
+        excel_data = ExportManager.generate_excel(records, columns)
+        send_excel(excel_data, file_name)
+      end
+    end
+
+    def send_csv(csv_data, file_name)
+      send_data csv_data, filename: file_name, type: "text/csv"
+    end
+
+    def send_excel(excel_data, file_name)
+      send_data excel_data,
+                filename: file_name,
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                disposition: 'attachment'
     end
   end
 end

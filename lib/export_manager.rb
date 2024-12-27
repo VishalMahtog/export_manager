@@ -10,4 +10,16 @@ module ExportManager
       end
     end
   end
+
+  def self.generate_excel(records, columns)
+    wb = Axlsx::Package.new
+    wb.workbook.add_worksheet(name: "Users Report") do |sheet|
+      sheet.add_row columns
+
+      records.each do |record|
+        sheet.add_row columns.map { |column| record.public_send(column) }
+      end
+    end
+    wb.to_stream.read
+  end
 end

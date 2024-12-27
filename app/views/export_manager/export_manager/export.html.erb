@@ -1,6 +1,6 @@
 <div class="select-table">
   <%= label_tag 'Table', 'Select Tables' %>
-  <%= select_tag 'Tables', options_for_select(@model_name), id: 'table-select', class: 'basic-single' %>
+  <%= select_tag 'Tables', options_for_select(@model_name), include_blank: 'Select Table', id: 'table-select', class: 'basic-single' %>
 </div>
 
 <div id="checkboxes"></div>
@@ -16,7 +16,7 @@
       console.log('Calling API to get column names');
 
       $.ajax({
-        url: '/send_coloum_name',  // Ensure this route exists
+        url: '/send_coloum_name',
         method: 'GET',
         data: { table: selectTable },
         success: function(response) {
@@ -25,7 +25,7 @@
 
           var form = $('<form>').attr({
             id: 'checkbox-form',
-            action: '/download',  // Ensure this route exists
+            action: '/download',
             method: 'GET'
           });
 
@@ -42,14 +42,22 @@
             id: 'select-all',
             name: 'select-all',
             checked: true,
+            class: 'export-select'
           }).on('change', function() {
             $('input[type="checkbox"]').prop('checked', $(this).prop('checked'));
           });
 
-          var selectAllLabel = $('<label>').attr('for', 'select-all').text('Select All');
-          form.append(selectAllCheckbox).append(selectAllLabel).append('<br>');
+          var selectAllLabel = $('<label>').attr('for', 'select-all').text('Select All').addClass('export-label');
 
-          // Loop through response to create checkboxes dynamically
+          var selectAllContainer = $('<div>').css({
+            display: 'inline-flex',
+            alignItems: 'center',
+            marginBottom: '15px'
+          });
+
+          selectAllContainer.append(selectAllCheckbox).append(selectAllLabel);
+          form.append(selectAllContainer).append('<br>');
+
           for (var i = 0; i < response.length; i++) {
             var key = response[i];
             var checkbox = $('<input>').attr({
@@ -57,18 +65,38 @@
               id: key,
               name: key,
               value: key,
-              checked: 'checked' // Check all checkboxes by default
+              checked: 'checked',
+              class: 'export-select'
             });
-            var label = $('<label>').attr('for', key).text(key);
+            var label = $('<label>').attr('for', key).text(key).addClass('export-label');
             form.append(checkbox).append(label).append('<br>');
           }
 
-          var submitButton = $('<input>').attr({
+          var csvButton = $('<input>').attr({
             type: 'submit',
-            value: 'Export CSV'
+            value: 'Export CSV',
+            class: 'export-button'
+          }).on('click', function() {
+            $('#export-type').val('csv');
           });
 
-          form.append(submitButton);
+          var excelButton = $('<input>').attr({
+            type: 'submit',
+            value: 'Export Excel',
+            class: 'export-button'
+          }).on('click', function() {
+            $('#export-type').val('excel');
+          });
+
+          var exportTypeField = $('<input>').attr({
+            type: 'hidden',
+            name: 'type',
+            id: 'export-type',
+            value: 'CSV'
+          });
+
+          form.append(exportTypeField);
+          form.append(csvButton).append(excelButton);
 
           checkboxesContainer.append(form);
         },
@@ -78,113 +106,4 @@
       });
     });
   });
-<% end %>
-
-<%= content_for :head do %>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f9;
-    }
-
-    label {
-      font-size: 1rem;
-      margin-bottom: 8px;
-      display: block;
-      color: #333;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      color: #333;
-      margin-bottom: 20px;
-    }
-
-    .select-table {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-
-    .select-table label {
-      font-weight: bold;
-      font-size: 1rem;
-    }
-
-    .select2-container--default .select2-selection--single {
-      height: 40px;
-      border-radius: 5px;
-      padding: 5px;
-      border: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-      font-size: 1rem;
-      color: #333;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-      padding: 5px;
-    }
-
-    .select2-container--default .select2-dropdown {
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .select2-container--default .select2-search--dropdown input {
-      font-size: 1rem;
-      padding: 6px;
-    }
-
-    #checkboxes {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    #checkbox-form {
-      margin: 0;
-    }
-
-    #checkbox-form input[type="checkbox"] {
-      margin-right: 20px;
-      accent-color: #007bff;
-    }
-
-    #checkbox-form label {
-      display: inline-block;
-      font-size: 1rem;
-      color: #333;
-    }
-
-    #select-all {
-      font-weight: bold;
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    #checkbox-form input[type="submit"] {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    #checkbox-form input[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-  </style>
 <% end %>
