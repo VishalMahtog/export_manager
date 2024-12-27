@@ -56,5 +56,11 @@ JSON_FILE_NAME =  "JSON_EXPORT_#{Date.today}.json"
 XML_FILE_NAME =  "XML_EXPORT_#{Date.today}.xml"
 ```
 
+If an authenticated user has the admin? method returning true, they can access the ExportManager engine at /.
+```ruby
+  authenticated :user, ->(user) { user.admin? } do
+    mount ExportManager::Engine, at: '/'
+  end
+```
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
