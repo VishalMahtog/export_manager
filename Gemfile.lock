@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    export_manager (0.1.0)
+    export_manager (0.1.2)
       rails (>= 7.0)
 
 GEM

@@ -9,6 +9,9 @@ Gem::Specification.new do |spec|
   spec.summary     = "ExportManager handles the dynamic export of table data to CSV, JSON, Excel, or XML format."
   spec.description = "The ExportManager allows users to export data from dynamic tables with dynamic columns. The system provides flexibility in selecting the data to be exported and generates a CSV, JSON, Excel, or XML file accordingly."
   spec.license     = "MIT"
+  spec.metadata = {
+    "keywords" => "export, csv, excel, JSON, json, xml, XML, export data, Export, gem, ruby"
+  }
   spec.metadata["homepage_uri"] = 'https://github.com/VishalMahtog/export_manager'
   spec.metadata["source_code_uri"] = "https://github.com/VishalMahtog/export_manager"
   spec.metadata["changelog_uri"] = "http://mygemserver.com"
