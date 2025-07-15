@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Export manager</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
@@ -12,8 +14,21 @@
   <%= javascript_include_tag 'export_manager/application', 'data-turbolinks-track': 'reload' %>
 </head>
 <body>
+  <nav class="navbar">
+    <div class="logo"><span class="green">Export Manager</span></div>
+    <ul>
+      <li class="<%= 'active' if request.path == '/export' %>">
+        <a href="/export">Dashboard</a>
+      </li>
+      <li class="<%= 'active' if request.path == '/history' %>">
+        <a href="/history">History</a>
+      </li>
+    </ul>
+  </nav>
 
-  <%= yield %>
+  <section class="export-container">
+    <%= yield %>
+  </section>
 
 </body>
 </html>

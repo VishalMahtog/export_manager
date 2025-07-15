@@ -13,6 +13,7 @@
     // Handle change event
     $('#table-select').change(function() {
       var selectTable = $(this).val();
+      if (!selectTable) return;
       console.log('Calling API to get column names');
 
       $.ajax({
@@ -27,16 +28,18 @@
             id: 'checkbox-form',
             action: '/download',
             method: 'GET'
-          });
+          }).addClass('export-form');
 
           var hiddenField1 = $('<input>').attr({
             type: 'hidden',
             name: 'table',
-            value: $('#table-select').val()
+            value: selectTable
           });
 
           form.append(hiddenField1);
 
+          // Create select all section
+          var selectAllContainer = $('<div>').addClass('select-all-container');
           var selectAllCheckbox = $('<input>').attr({
             type: 'checkbox',
             id: 'select-all',
@@ -44,65 +47,45 @@
             checked: true,
             class: 'export-select'
           }).on('change', function() {
-            $('input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+            $('.export-select:not(#select-all)').prop('checked', $(this).prop('checked'));
           });
 
-          var selectAllLabel = $('<label>').attr('for', 'select-all').text('Select All').addClass('export-label');
+          var selectAllLabel = $('<label>').attr('for', 'select-all')
+                                           .text('Select All')
+                                           .addClass('export-label');
 
-          var selectAllContainer = $('<div>').css({
-            display: 'inline-flex',
-            alignItems: 'center',
-            marginBottom: '15px'
-          });
+          selectAllContainer.append(selectAllCheckbox)
+                           .append(selectAllLabel);
+          form.append(selectAllContainer);
 
-          selectAllContainer.append(selectAllCheckbox).append(selectAllLabel);
-          form.append(selectAllContainer).append('<br>');
+          // Create checkbox grid
+          var checkboxGrid = $('<div>').addClass('checkbox-grid');
 
           for (var i = 0; i < response.length; i++) {
             var key = response[i];
+            var checkboxItem = $('<div>').addClass('checkbox-item');
+
             var checkbox = $('<input>').attr({
               type: 'checkbox',
               id: key,
               name: key,
               value: key,
-              checked: 'checked',
+              checked: true,
               class: 'export-select'
             });
-            var label = $('<label>').attr('for', key).text(key).addClass('export-label');
-            form.append(checkbox).append(label).append('<br>');
+
+            var label = $('<label>').attr('for', key)
+                                   .text(key)
+                                   .addClass('export-label');
+
+            checkboxItem.append(checkbox).append(label);
+            checkboxGrid.append(checkboxItem);
           }
 
-          var csvButton = $('<input>').attr({
-            type: 'submit',
-            value: 'Export CSV',
-            class: 'export-button'
-          }).on('click', function() {
-            $('#export-type').val('csv');
-          });
+          form.append(checkboxGrid);
 
-          var excelButton = $('<input>').attr({
-            type: 'submit',
-            value: 'Export EXCEL',
-            class: 'export-button'
-          }).on('click', function() {
-            $('#export-type').val('excel');
-          });
-
-          var jsonButton = $('<input>').attr({
-            type: 'submit',
-            value: 'Export JSON',
-            class: 'export-button'
-          }).on('click', function() {
-            $('#export-type').val('json');
-          });
-
-          var xmlButton = $('<input>').attr({
-            type: 'submit',
-            value: 'Export XML',
-            class: 'export-button'
-          }).on('click', function() {
-            $('#export-type').val('xml');
-          });
+          // Create buttons container
+          var buttonsContainer = $('<div>').addClass('buttons-container');
 
           var exportTypeField = $('<input>').attr({
             type: 'hidden',
@@ -111,9 +94,41 @@
             value: 'CSV'
           });
 
-          form.append(exportTypeField);
-          form.append(csvButton).append(excelButton).append(jsonButton).append(xmlButton);
+          var csvButton = $('<button>').attr({
+            type: 'submit',
+            class: 'export-button'
+          }).text('Export CSV').on('click', function() {
+            $('#export-type').val('csv');
+          });
 
+          var excelButton = $('<button>').attr({
+            type: 'submit',
+            class: 'export-button'
+          }).text('Export Excel').on('click', function() {
+            $('#export-type').val('excel');
+          });
+
+          var jsonButton = $('<button>').attr({
+            type: 'submit',
+            class: 'export-button'
+          }).text('Export JSON').on('click', function() {
+            $('#export-type').val('json');
+          });
+
+          var xmlButton = $('<button>').attr({
+            type: 'submit',
+            class: 'export-button'
+          }).text('Export XML').on('click', function() {
+            $('#export-type').val('xml');
+          });
+
+          buttonsContainer.append(exportTypeField)
+                         .append(csvButton)
+                         .append(excelButton)
+                         .append(jsonButton)
+                         .append(xmlButton);
+
+          form.append(buttonsContainer);
           checkboxesContainer.append(form);
         },
         error: function() {
