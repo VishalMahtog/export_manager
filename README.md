@@ -5,7 +5,9 @@ The ExportManager handles the dynamic export of table data to CSV, JSON, Excel, 
 The ExportManager allows users to export data from dynamic tables with dynamic columns. The system provides flexibility in selecting the data to be exported and generates a **CSV, JSON, Excel, or XML** file accordingly.
 
 ## Demo
-[Screencast from 27-12-24 04:09:24 PM IST.webm](https://github.com/user-attachments/assets/17d245c3-5234-4171-b349-6cc1a74ea847)
+https://github.com/user-attachments/assets/dda5cdf0-8b37-41aa-b573-37c51415b7d8
+
+
 
 ## Quick Start
 ```ruby
